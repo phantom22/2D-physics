@@ -7,7 +7,6 @@
         "t.ts",
         "Vector2.ts",
         "Planet.ts",
-        "SolarSystem.ts",
-        "main.ts"
+        "SolarSystem.ts"
     ]
 }

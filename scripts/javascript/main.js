@@ -104,6 +104,7 @@ class Planet {
             //p.bounce();
             this.pos = new Vector2(p.pos.x + (radii_sum + 1) * ((this.pos.x - p.pos.x) / dist), p.pos.y + (radii_sum + 1) * ((this.pos.y - p.pos.y) / dist));
             const t = this.dir.clone();
+            // MASS RATIO
             this.dir = p.dir; //this.dir.sub(p.dir);
             p.dir = t; //p.dir.sub(t);
             return false;
@@ -117,10 +118,10 @@ class Planet {
         const { x, y } = this.pos, r = this.radius;
         let correctedPosition = this.pos.clamp([0, width - r], [0, height - r]);
         if (x - r <= 0 || x + r >= width) {
-            this.dir = this.dir.scale(new Vector2(-0.5, 1));
+            this.dir = this.dir.scale(new Vector2(-1, 1));
         }
-        if (y - r <= 0 || y + r >= height) {
-            this.dir = this.dir.scale(new Vector2(1, -0.5));
+        if (y - r - 0.5 <= 0 || y + r >= height) {
+            this.dir = this.dir.scale(new Vector2(1, -1));
         }
         this.pos = correctedPosition;
     }
