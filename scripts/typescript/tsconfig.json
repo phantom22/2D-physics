@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "outFile": "../javascript/main.js"
+    },
+    "files": [
+        "t.ts",
+        "Vector2.ts",
+        "Planet.ts",
+        "SolarSystem.ts",
+        "main.ts"
+    ]
+}
