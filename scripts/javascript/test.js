@@ -3,13 +3,13 @@ function _(x,y) {
 }
 
 let planets = [];
-const numOfPlanets = 32,
-      radius = 5,
-      mass = 1E6,
+const numOfPlanets = 50,
+      radius = 40,
+      mass = 1.5E5,
       slice = Math.PI * 2 / numOfPlanets,
       colors = ["#4FBDBA","#4FBDBA","#35858B"];
 
-let distFromCenter = 400,
+let distFromCenter = 300,
     currentColor = 0;
 
 const center = [window.innerWidth / 2, window.innerHeight / 2];
@@ -22,7 +22,7 @@ for (let i=0; i<numOfPlanets; i++) {
         _(center[0]+distFromCenter*Math.cos(s), center[1]+distFromCenter*Math.sin(s)),
         radius,
         mass,
-        _(Math.cos(s)*45,Math.sin(s)*45),
+        _(Math.cos(s)*20,Math.sin(s)*20),
         colors[currentColor]
     ));
 }
@@ -30,12 +30,12 @@ for (let i=0; i<numOfPlanets; i++) {
 planets.push(new Planet(
     _(center[0], center[1]),
     30,
-    1E10,
+    1.5E10,
     _(0,0),
-    "white"
+    "red"
 ))
 
-const system = new SolarSystem("screen", 0.0001, planets);
+const system = new SolarSystem("screen", 0.0009, planets);
 
 // const system = new SolarSystem("screen", 0.005, [
 //     new Planet(_(center[0] - center[0]/3, center[1] - center[1]/4),

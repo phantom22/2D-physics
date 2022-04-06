@@ -6,6 +6,8 @@ interface Planet {
     col: string;
     applyPull(p: Planet, scale: number): void;
     update(): void;
+    bounce(p: Planet): void;
+    checkCollision(p: Planet): void;
 }
 
 interface SolarSystem {

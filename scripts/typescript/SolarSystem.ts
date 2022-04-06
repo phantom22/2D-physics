@@ -1,3 +1,7 @@
+let mousePosition = [-1,-1];
+let sP: Planet = null;
+let sPPos: Vector2[] = [];
+let prevColor = "";
 class SolarSystem {
     constructor(canvasId: string, scale: number, planets: Planet[]) {
         const canvas = document.getElementById(canvasId);
@@ -6,6 +10,39 @@ class SolarSystem {
         this.ctx = canvas.getContext("2d");
         this.planets = planets;
         this.scale = scale;
+        canvas.addEventListener("mousemove", function(e) {
+            mousePosition = [e.clientX, e.clientY];
+        });
+        canvas.addEventListener("mousedown", function(e) {
+            this.searchPlanet(e.clientX, e.clientY);
+            canvas.classList.add("no-cursor");
+        }.bind(this));
+        canvas.addEventListener("mouseup", function() {
+            canvas.classList.remove("no-cursor");
+            if (sP !== null) sP.col = prevColor;
+            sP = null;
+            sPPos = [];
+        }.bind(this));
+        canvas.addEventListener("mouseleave", function() {
+            canvas.classList.remove("no-cursor");
+            if (sP !== null) sP.col = prevColor;
+            sP = null;
+            sPPos = [];
+        }.bind(this));
+    }
+    searchPlanet(mx: number, my: number): void {
+        const mv = new Vector2(mx,my);
+        for (let i=0; i<this.planets.length; i++) {
+            const { pos,radius } = this.planets[i],
+                    dist = mv.distance(pos);
+            if (dist <= radius) {
+                sP = this.planets[i];
+                this.planets[i].dir = Vector2.zero();
+                prevColor = this.planets[i].col;
+                this.planets[i].col = "white";
+                break;
+            }
+        }
     }
     drawPlanet(p: Planet): void {
         const ctx = this.ctx;
@@ -28,11 +65,24 @@ class SolarSystem {
     }
     physicsStep() {
         const pl = this.planets;
+        if (sP !== null) {
+            sPPos.push(sP.pos);
+            if (sPPos.length > 2) sPPos.shift();
+
+            sP.pos = new Vector2(mousePosition[0], mousePosition[1]);
+            if (sPPos.length < 2) {
+                sP.dir = sP.dir;
+            }
+            else {
+                const delta = sPPos[1].sub(sPPos[0]);
+                sP.dir = delta.magnitude() > 20 ? delta.mul(2.33) : sP.dir;
+            }
+        }
         for (let a=0; a<pl.length; a++) {
             pl[a].update();
             for (let b=0; b<pl.length; b++) {
                 if (b===a) continue;
-                pl[a].applyPull(pl[b], this.scale);
+                if (sP===null||sP!==null&&!sP.equals(pl[a])) pl[a].applyPull(pl[b], this.scale);
                 pl[a].checkCollisions(pl[b]);
             }
         }
