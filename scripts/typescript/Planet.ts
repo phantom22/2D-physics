@@ -1,6 +1,6 @@
 const Physics = {
     gravitationalConstant: 6.674E-11,
-    fps: 60
+    fps: 144
 }
 
 class Planet {
