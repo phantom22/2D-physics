@@ -1,6 +1,5 @@
 const Physics = {
-    gravitationalConstant: 6.674E-11,
-    fps: 60
+    gravitationalConstant: 6.674E-11
 }
 
 class Planet {
@@ -53,20 +52,21 @@ class Planet {
         if (Vec2.isNaN(this.dir)) this.dir = Vec2.repair(this.dir);
         if (Vec2.isNaN(p.dir)) p.dir = Vec2.repair(p.dir);
     }
-    update() {
-        if (this.isSelected()) return;
+    update(fps: number): void {
         const width = window.innerWidth,
               height = window.innerHeight;
-        const force = Vec2.div(this.dir,Physics.fps);
+        const force = Vec2.div(this.dir,fps);
         this.pos = Vec2.add(this.pos,force);
         const [ x,y ] = this.pos,
                 r = this.radius;
         let correctedPosition = Vec2.clamp(this.pos, [r, width-r], [r, height-r]);
-        if (x < r || x > width-r) {
-            this.dir = Vec2.scale(this.dir,[-0.96,0.98]);
-        }
-        if (y < r || y > height-r) {
-            this.dir = Vec2.scale(this.dir,[0.98,-0.96]);
+        if (!this.isSelected()) {
+            if (x < r || x > width-r) {
+                this.dir = Vec2.scale(this.dir,[-0.96,0.98]);
+            }
+            if (y < r || y > height-r) {
+                this.dir = Vec2.scale(this.dir,[0.98,-0.96]);
+            }
         }
         this.pos = correctedPosition;
     }

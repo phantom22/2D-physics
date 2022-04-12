@@ -5,13 +5,14 @@ interface Planet {
     dir: Vector2;
     col: string;
     applyPull(p: Planet, scale: number): void;
-    update(): void;
+    update(fps: number): void;
     bounce(p: Planet): void;
     checkCollision(p: Planet): void;
 }
 
 interface SolarSystem {
     scale: number;
+    fps: number;
     canvas: HTMLCanvasElement;
     ctx: CanvasRenderingContext2D;
     planets: Planet[];

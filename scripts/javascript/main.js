@@ -28,8 +28,7 @@ Vec2.clamp = (v, x, y) => [Math.max(x[0], Math.min(v[0], x[1])), Math.max(y[0], 
 Vec2.simpleClamp = (v, min, max) => [Math.max(min, Math.min(v[0], max)), Math.max(min, Math.min(v[1], max))];
 Object.freeze(Vec2);
 const Physics = {
-    gravitationalConstant: 6.674E-11,
-    fps: 60
+    gravitationalConstant: 6.674E-11
 };
 class Planet {
     constructor(pos, radius, mass, dir, col) {
@@ -79,19 +78,19 @@ class Planet {
         if (Vec2.isNaN(p.dir))
             p.dir = Vec2.repair(p.dir);
     }
-    update() {
-        if (this.isSelected())
-            return;
+    update(fps) {
         const width = window.innerWidth, height = window.innerHeight;
-        const force = Vec2.div(this.dir, Physics.fps);
+        const force = Vec2.div(this.dir, fps);
         this.pos = Vec2.add(this.pos, force);
         const [x, y] = this.pos, r = this.radius;
         let correctedPosition = Vec2.clamp(this.pos, [r, width - r], [r, height - r]);
-        if (x < r || x > width - r) {
-            this.dir = Vec2.scale(this.dir, [-0.96, 0.98]);
-        }
-        if (y < r || y > height - r) {
-            this.dir = Vec2.scale(this.dir, [0.98, -0.96]);
+        if (!this.isSelected()) {
+            if (x < r || x > width - r) {
+                this.dir = Vec2.scale(this.dir, [-0.96, 0.98]);
+            }
+            if (y < r || y > height - r) {
+                this.dir = Vec2.scale(this.dir, [0.98, -0.96]);
+            }
         }
         this.pos = correctedPosition;
     }
@@ -99,9 +98,8 @@ class Planet {
 let mousePosition = [-1, -1];
 let sP = null;
 let sPPos = [];
-let prevColor = "";
 class SolarSystem {
-    constructor(canvasId, scale, planets) {
+    constructor(canvasId, scale, fps, planets) {
         const canvas = document.getElementById(canvasId);
         if (!(canvas instanceof HTMLCanvasElement))
             return;
@@ -109,6 +107,7 @@ class SolarSystem {
         this.ctx = canvas.getContext("2d");
         this.planets = planets;
         this.scale = scale;
+        this.fps = fps;
         canvas.addEventListener("mousemove", function (e) {
             mousePosition = [e.clientX, e.clientY];
         });
@@ -117,13 +116,11 @@ class SolarSystem {
             this.searchPlanet(e.clientX, e.clientY);
             canvas.classList.add("no-cursor");
         }.bind(this));
-        canvas.addEventListener("mouseup mouseleave", function () {
+        ["mouseup", "mouseleave"].forEach(v => canvas.addEventListener(v, function () {
             canvas.classList.remove("no-cursor");
-            if (sP !== null)
-                sP.col = prevColor;
             sP = null;
             sPPos = [];
-        }.bind(this));
+        }.bind(this)));
     }
     searchPlanet(mx, my) {
         for (let i = 0; i < this.planets.length; i++) {
@@ -131,8 +128,7 @@ class SolarSystem {
             if (dist <= radius) {
                 sP = this.planets[i];
                 this.planets[i].dir = Vec2.zero;
-                prevColor = this.planets[i].col;
-                this.planets[i].col = "white";
+                this.planets[i].col = "rgba(50,50,50,0.3)";
                 break;
             }
         }
@@ -143,8 +139,9 @@ class SolarSystem {
         ctx.arc(p.pos[0], p.pos[1], p.radius, 0, Math.PI * 2);
         ctx.fillStyle = p.col;
         ctx.fill();
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = p.col;
+        ctx.lineWidth = p.isSelected() ? 10 : 1;
+        ctx.setLineDash(p.isSelected() ? [15, 15] : []);
+        ctx.strokeStyle = p.isSelected() ? "#ffffff" : p.col;
         ctx.stroke();
     }
     updateCanvas() {
@@ -168,7 +165,7 @@ class SolarSystem {
             }
             else {
                 const delta = Vec2.sub(sPPos[1], sPPos[0]);
-                sP.dir = Vec2.magnitude(delta) > 20 ? Vec2.mul(delta, 2.33) : sP.dir;
+                sP.dir = Vec2.magnitude(delta) > 5 ? Vec2.mul(delta, 20) : Vec2.zero;
             }
         }
         for (let a = 0; a < pl.length; a++) {
@@ -177,7 +174,7 @@ class SolarSystem {
                     continue;
                 pl[a].checkCollisions(pl[b]);
             }
-            pl[a].update();
+            pl[a].update(this.fps);
             for (let b = 0; b < pl.length; b++) {
                 if (b === a)
                     continue;
