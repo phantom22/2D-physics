@@ -5,7 +5,7 @@
     },
     "files": [
         "t.ts",
-        "Vector2.ts",
+        "Vec2.ts",
         "Planet.ts",
         "SolarSystem.ts"
     ]

@@ -1,10 +1,6 @@
-function _(x,y) {
-    return new Vector2(x,y);
-}
-
 let planets = [];
-const numOfPlanets = 50,
-      radius = 40,
+const numOfPlanets = 300,
+      radius = 2,
       mass = 1.5E5,
       slice = Math.PI * 2 / numOfPlanets,
       colors = ["#4FBDBA","#4FBDBA","#35858B"];
@@ -19,19 +15,19 @@ for (let i=0; i<numOfPlanets; i++) {
     currentColor++;
     currentColor%=colors.length;
     planets.push(new Planet(
-        _(center[0]+distFromCenter*Math.cos(s), center[1]+distFromCenter*Math.sin(s)),
+        [center[0]+distFromCenter*Math.cos(s), center[1]+distFromCenter*Math.sin(s)],
         radius,
         mass,
-        _(Math.cos(s)*20,Math.sin(s)*20),
+        [Math.cos(s)*20,Math.sin(s)*20],
         colors[currentColor]
     ));
 }
 
 planets.push(new Planet(
-    _(center[0], center[1]),
+    [center[0], center[1]],
     30,
     1.5E10,
-    _(0,0),
+    [0,0],
     "red"
 ))
 

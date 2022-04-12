@@ -1,223 +1,32 @@
-;
-/**
- * representation of 2D vectors and points.
- * @class
- * @property {number} x horizontal position.
- * @property {number} y vertical position.
- */
-class Vector2 {
-    /**
-     * @param {number} x
-     * @param {number} y
-     */
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
-    }
-    /**
-     * returns a (0,1) vector.
-     * @returns {Vector2}
-     */
-    static up() {
-        return new Vector2(0, 1);
-    }
-    /**
-     * returns a (0,-1) vector.
-     * @returns {Vector2}
-     */
-    static down() {
-        return new Vector2(0, -1);
-    }
-    /**
-     * returns a (-1,0) vector.
-     * @returns {Vector2}
-     */
-    static left() {
-        return new Vector2(-1, 0);
-    }
-    /**
-     * returns a (1,0) vector.
-     * @returns {Vector2}
-     */
-    static right() {
-        return new Vector2(1, 0);
-    }
-    /**
-     * returns a (1,1) vector.
-     * @returns {Vector2}
-     */
-    static one() {
-        return new Vector2(1, 1);
-    }
-    /**
-     * returns a (0,0) vector.
-     * @returns {Vector2}
-     */
-    static zero() {
-        return new Vector2(0, 0);
-    }
-    /**
-     * returns a formatted string for this vector.
-     * @returns {string}
-     */
-    toString() {
-        return `Vector2(${this.x},${this.y})`;
-    }
-    /**
-     * X component of the vector (read-only).
-     * @returns {number}
-     */
-    get 0() {
-        return this.x;
-    }
-    /**
-     * Y component of the vector (read-only).
-     * @returns {number}
-     */
-    get 1() {
-        return this.y;
-    }
-    /**
-     * returns true if the given vector is exactly equal to this vector.
-     * @returns {boolean}
-     */
-    equals(v) {
-        return this === v;
-    }
-    /**
-     * returns true if two vectors are approximately equal.
-     * @returns {boolean}
-     */
-    compare(v) {
-        return this.x === v.x && this.y === v.y;
-    }
-    /**
-     * checks wether any of the components is not a number.
-     * @returns {boolean}
-     */
-    isNaN() {
-        return Number.isNaN(this.x) || Number.isNaN(this.y);
-    }
-    /**
-     * sets all the NaN components to 0 by default.
-     * @param {number} [v=0]
-     */
-    repair(v = 0) {
-        this.x ||= v;
-        this.y ||= v;
-    }
-    /**
-     * returns a copy of the vector.
-     * @returns {Vector2}
-     */
-    clone() {
-        return new Vector2(this.x, this.y);
-    }
-    /**
-     * adds two vectors.
-     * @param {Vector2} v
-     * @returns {Vector2}
-     */
-    add(v) {
-        return new Vector2(this.x + v.x, this.y + v.y);
-    }
-    /**
-     * subtracts one vector from another.
-     * @param {Vector2} v
-     * @returns {Vector2}
-     */
-    sub(v) {
-        return new Vector2(this.x - v.x, this.y - v.y);
-    }
-    /**
-     * multiplies a vector by a number.
-     * @param {number} n
-     * @returns {Vector2}
-     */
-    mul(n) {
-        return new Vector2(this.x * n, this.y * n);
-    }
-    /**
-     * dot product of two vectors.
-     * @param {Vector2} v
-     * @returns {number}
-     */
-    dot(v) {
-        return this.x * v.x + this.y * v.y;
-    }
-    /**
-     * multiplies two vectors component-wise.
-     * @param {Vector2} v
-     * @returns {Vector2}
-     */
-    scale(v) {
-        return new Vector2(this.x * v.x, this.y * v.y);
-    }
-    /**
-     * divides a vector by a number.
-     * @param {number} n
-     * @returns {Vector2}
-     */
-    div(n) {
-        return new Vector2(this.x / n, this.y / n);
-    }
-    /**
-     * returns the length of this vector.
-     * @returns {number}
-     */
-    magnitude() {
-        return Math.sqrt(this.x ** 2 + this.y ** 2);
-    }
-    /**
-     * returns the squared length of this vector.
-     * @returns {number}
-     */
-    sqrMagnitude() {
-        return this.x ** 2 + this.y ** 2;
-    }
-    /**
-     * returns this vector with a magnitude of 1.
-     * @returns {Vector2}
-     */
-    normalize() {
-        const len = this.magnitude();
-        return new Vector2(this.x / len, this.y / len);
-    }
-    /**
-     * returns the distance between two vectors.
-     * @param {Vector2} v
-     * @returns {number}
-     */
-    distance(v) {
-        return Math.sqrt((this.x - v.x) ** 2 + (this.y - v.y) ** 2);
-    }
-    /**
-     * returns the angle between two vectors.
-     * @param {Vector2} v
-     * @returns {number}
-     */
-    angle(v) {
-        return Math.acos(this.dot(v) / (this.magnitude() * v.magnitude()));
-    }
-    /**
-     * returns a clamped vector.
-     * @param {[number, number]} x [minX, maxX]
-     * @param {[number, number]} y [minY, maxY]
-     * @returns {Vector2}
-     */
-    clamp(x, y) {
-        return new Vector2(Math.max(x[0], Math.min(this.x, x[1])), Math.max(y[0], Math.min(this.y, y[1])));
-    }
-    /**
-     * returns a clamped vector.
-     * @param {number} min
-     * @param {number} max
-     * @returns {Vector2}
-     */
-    simpleClamp(min, max) {
-        return new Vector2(Math.max(min, Math.min(this.x, max)), Math.max(min, Math.min(this.y, max)));
-    }
+function Vec2(x, y) {
+    return [x, y];
 }
+Vec2.up = [0, 1];
+Vec2.down = [0, -1];
+Vec2.left = [-1, 0];
+Vec2.right = [1, 0];
+Vec2.one = [1, 1];
+Vec2.zero = [0, 0];
+Vec2.toString = (v) => `Vector2(${v[0]},${v[1]})`;
+Vec2.equals = (a, b) => a === b;
+Vec2.compare = (a, b) => a[0] === b[0] && a[1] === b[1];
+Vec2.isNaN = (v) => Number.isNaN(v[0]) || Number.isNaN(v[1]);
+Vec2.repair = (v, _ = 0) => [v[0] || _, v[1] || _];
+Vec2.clone = (v) => [...v];
+Vec2.add = (a, b) => [a[0] + b[0], a[1] + b[1]];
+Vec2.sub = (a, b) => [a[0] - b[0], a[1] - b[1]];
+Vec2.mul = (v, _) => [v[0] * _, v[1] * _];
+Vec2.dot = (a, b) => a[0] * b[0] + a[1] * b[1];
+Vec2.scale = (a, b) => [a[0] * b[0], a[1] * b[1]];
+Vec2.div = (v, _) => { const t = 1 / _; return [v[0] * t, v[1] * t]; };
+Vec2.magnitude = (v) => (v[0] ** 2 + v[1] ** 2) ** (1 / 2);
+Vec2.sqrMagnitude = (v) => v[0] ** 2 + v[1] ** 2;
+Vec2.normalize = (v) => { const t = 1 / Vec2.magnitude(v); return [v[0] * t, v[1] * t]; };
+Vec2.distance = (a, b) => ((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2) ** (1 / 2);
+Vec2.angle = (a, b) => Math.acos(Vec2.dot(a, b) / (Vec2.magnitude(a) * Vec2.magnitude(b)));
+Vec2.clamp = (v, x, y) => [Math.max(x[0], Math.min(v[0], x[1])), Math.max(y[0], Math.min(v[1], y[1]))];
+Vec2.simpleClamp = (v, min, max) => [Math.max(min, Math.min(v[0], max)), Math.max(min, Math.min(v[1], max))];
+Object.freeze(Vec2);
 const Physics = {
     gravitationalConstant: 6.674E-11,
     fps: 60
@@ -233,18 +42,26 @@ class Planet {
     equals(p) {
         return this === p;
     }
+    isSelected() {
+        return sP !== null && sP.equals(this);
+    }
     applyPull(p, scale) {
-        const dir = p.pos.sub(this.pos).normalize(), G = Physics.gravitationalConstant;
-        const dist = this.pos.distance(p.pos);
-        const masses = Vector2.one().mul(this.mass * p.mass);
-        let pull = masses.div(dist);
-        pull = pull.mul(G * scale).scale(dir);
-        this.dir = this.dir.add(pull);
+        const dir = Vec2.normalize(Vec2.sub(p.pos, this.pos)), G = Physics.gravitationalConstant;
+        const dist = Vec2.distance(this.pos, p.pos);
+        const masses = Vec2.mul(Vec2.one, this.mass * p.mass);
+        let pull = Vec2.div(masses, dist);
+        pull = Vec2.scale(Vec2.mul(pull, G * scale), dir);
+        this.dir = Vec2.add(this.dir, pull);
     }
     checkCollisions(p) {
-        const dist = this.pos.distance(p.pos) || 1, radii_sum = this.radius + p.radius;
+        const dist = Vec2.distance(this.pos, p.pos) || 1, radii_sum = this.radius + p.radius;
         if (dist <= radii_sum) {
-            this.pos = new Vector2(p.pos.x + (radii_sum + 1) * ((this.pos.x - p.pos.x) / dist), p.pos.y + (radii_sum + 1) * ((this.pos.y - p.pos.y) / dist));
+            if (!this.isSelected()) {
+                this.pos = [
+                    p.pos[0] + (radii_sum + 1) * ((this.pos[0] - p.pos[0]) / dist),
+                    p.pos[1] + (radii_sum + 1) * ((this.pos[1] - p.pos[1]) / dist)
+                ];
+            }
             this.bounce(p);
         }
     }
@@ -252,27 +69,29 @@ class Planet {
     // v3 = (m1v1 * m2v2)/(m1+m2)
     // v3 = ()
     bounce(p) {
-        const totMomentum = this.dir.magnitude() + p.dir.magnitude(), r1 = p.mass / (this.mass + p.mass), r2 = 1 - r1, t = this.dir.clone();
-        this.dir = p.dir.normalize().mul(totMomentum * r1 ** 2.7);
-        p.dir = t.normalize().mul(totMomentum * r2 ** 2.7);
-        if (this.dir.isNaN())
-            this.dir.repair();
-        if (p.dir.isNaN())
-            p.dir.repair();
+        const totMomentum = Vec2.magnitude(this.dir) + Vec2.magnitude(p.dir), r1 = p.mass / (this.mass + p.mass), r2 = 1 - r1, t = Vec2.clone(this.dir);
+        if (!this.isSelected())
+            this.dir = Vec2.mul(Vec2.normalize(p.dir), totMomentum * r1 ** 2.7);
+        if (!p.isSelected())
+            p.dir = Vec2.mul(Vec2.normalize(t), totMomentum * r2 ** 2.7);
+        if (Vec2.isNaN(this.dir))
+            this.dir = Vec2.repair(this.dir);
+        if (Vec2.isNaN(p.dir))
+            p.dir = Vec2.repair(p.dir);
     }
     update() {
-        if (sP !== null && sP.equals(this))
+        if (this.isSelected())
             return;
         const width = window.innerWidth, height = window.innerHeight;
-        const force = this.dir.div(Physics.fps);
-        this.pos = this.pos.add(force);
-        const { x, y } = this.pos, r = this.radius;
-        let correctedPosition = this.pos.clamp([0, width - r - 1], [0, height - 1]);
-        if (x - r - 1 <= 0 || x + r + 1 >= width) {
-            this.dir = this.dir.scale(new Vector2(-0.96, 0.98));
+        const force = Vec2.div(this.dir, Physics.fps);
+        this.pos = Vec2.add(this.pos, force);
+        const [x, y] = this.pos, r = this.radius;
+        let correctedPosition = Vec2.clamp(this.pos, [r, width - r], [r, height - r]);
+        if (x < r || x > width - r) {
+            this.dir = Vec2.scale(this.dir, [-0.96, 0.98]);
         }
-        if (y - r - 1 <= 0 || y + r + 1 >= height) {
-            this.dir = this.dir.scale(new Vector2(0.98, -0.96));
+        if (y < r || y > height - r) {
+            this.dir = Vec2.scale(this.dir, [0.98, -0.96]);
         }
         this.pos = correctedPosition;
     }
@@ -294,17 +113,11 @@ class SolarSystem {
             mousePosition = [e.clientX, e.clientY];
         });
         canvas.addEventListener("mousedown", function (e) {
+            mousePosition = [e.clientX, e.clientY];
             this.searchPlanet(e.clientX, e.clientY);
             canvas.classList.add("no-cursor");
         }.bind(this));
-        canvas.addEventListener("mouseup", function () {
-            canvas.classList.remove("no-cursor");
-            if (sP !== null)
-                sP.col = prevColor;
-            sP = null;
-            sPPos = [];
-        }.bind(this));
-        canvas.addEventListener("mouseleave", function () {
+        canvas.addEventListener("mouseup mouseleave", function () {
             canvas.classList.remove("no-cursor");
             if (sP !== null)
                 sP.col = prevColor;
@@ -313,12 +126,11 @@ class SolarSystem {
         }.bind(this));
     }
     searchPlanet(mx, my) {
-        const mv = new Vector2(mx, my);
         for (let i = 0; i < this.planets.length; i++) {
-            const { pos, radius } = this.planets[i], dist = mv.distance(pos);
+            const { pos, radius } = this.planets[i], dist = Vec2.distance([mx, my], pos);
             if (dist <= radius) {
                 sP = this.planets[i];
-                this.planets[i].dir = Vector2.zero();
+                this.planets[i].dir = Vec2.zero;
                 prevColor = this.planets[i].col;
                 this.planets[i].col = "white";
                 break;
@@ -328,7 +140,7 @@ class SolarSystem {
     drawPlanet(p) {
         const ctx = this.ctx;
         ctx.beginPath();
-        ctx.arc(p.pos.x, p.pos.y, p.radius, 0, Math.PI * 2);
+        ctx.arc(p.pos[0], p.pos[1], p.radius, 0, Math.PI * 2);
         ctx.fillStyle = p.col;
         ctx.fill();
         ctx.lineWidth = 1;
@@ -339,7 +151,7 @@ class SolarSystem {
         const canvas = this.canvas, ctx = this.ctx, pl = this.planets;
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        //ctx.clearRect(0,0,canvas.width,canvas.height);
         for (let i = 0; i < pl.length; i++) {
             this.drawPlanet(pl[i]);
         }
@@ -350,23 +162,27 @@ class SolarSystem {
             sPPos.push(sP.pos);
             if (sPPos.length > 2)
                 sPPos.shift();
-            sP.pos = new Vector2(mousePosition[0], mousePosition[1]);
+            sP.pos = [mousePosition[0], mousePosition[1]];
             if (sPPos.length < 2) {
                 sP.dir = sP.dir;
             }
             else {
-                const delta = sPPos[1].sub(sPPos[0]);
-                sP.dir = delta.magnitude() > 20 ? delta.mul(2.33) : sP.dir;
+                const delta = Vec2.sub(sPPos[1], sPPos[0]);
+                sP.dir = Vec2.magnitude(delta) > 20 ? Vec2.mul(delta, 2.33) : sP.dir;
             }
         }
         for (let a = 0; a < pl.length; a++) {
+            for (let b = 0; b < pl.length; b++) {
+                if (b === a)
+                    continue;
+                pl[a].checkCollisions(pl[b]);
+            }
             pl[a].update();
             for (let b = 0; b < pl.length; b++) {
                 if (b === a)
                     continue;
                 if (sP === null || sP !== null && !sP.equals(pl[a]))
                     pl[a].applyPull(pl[b], this.scale);
-                pl[a].checkCollisions(pl[b]);
             }
         }
         this.updateCanvas();

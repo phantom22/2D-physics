@@ -1,0 +1,16 @@
+SolarSystem.physicsStep()
+    1. change selected planet position
+    2. gravitational pull
+        a. first apply pull
+            this.Planet.dir
+        b. check for collisions
+            #if collision detected
+             -> this.Planet.pos
+                Planet.bounce()
+                    this.Planet.dir
+                    other.Planet.dir
+        c. move planet
+            #if border collision
+             -> this.Planet.pos
+                this.Planet.dir
+    3. draw
