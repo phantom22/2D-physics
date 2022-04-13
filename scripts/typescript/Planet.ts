@@ -36,6 +36,9 @@ class Planet {
                     p.pos[1]+(radii_sum+1)*((this.pos[1]-p.pos[1])/dist)
                 ];
             }
+            else {
+                //p.col = this.col;
+            }
             this.bounce(p);
         }
     }

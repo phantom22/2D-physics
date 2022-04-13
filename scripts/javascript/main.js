@@ -61,6 +61,9 @@ class Planet {
                     p.pos[1] + (radii_sum + 1) * ((this.pos[1] - p.pos[1]) / dist)
                 ];
             }
+            else {
+                //p.col = this.col;
+            }
             this.bounce(p);
         }
     }
@@ -128,7 +131,6 @@ class SolarSystem {
             if (dist <= radius) {
                 sP = this.planets[i];
                 this.planets[i].dir = Vec2.zero;
-                this.planets[i].col = "rgba(50,50,50,0.3)";
                 break;
             }
         }
@@ -139,8 +141,8 @@ class SolarSystem {
         ctx.arc(p.pos[0], p.pos[1], p.radius, 0, Math.PI * 2);
         ctx.fillStyle = p.col;
         ctx.fill();
-        ctx.lineWidth = p.isSelected() ? 10 : 1;
-        ctx.setLineDash(p.isSelected() ? [15, 15] : []);
+        ctx.lineWidth = p.isSelected() ? 5 : 1;
+        ctx.setLineDash(p.isSelected() ? [5, 5] : []);
         ctx.strokeStyle = p.isSelected() ? "#ffffff" : p.col;
         ctx.stroke();
     }
@@ -159,7 +161,9 @@ class SolarSystem {
             sPPos.push(sP.pos);
             if (sPPos.length > 2)
                 sPPos.shift();
-            sP.pos = [mousePosition[0], mousePosition[1]];
+            const r = sP.radius;
+            sP.pos = Vec2.clamp(mousePosition, [r, window.innerWidth - r], [r, window.innerHeight - r]);
+            ;
             if (sPPos.length < 2) {
                 sP.dir = sP.dir;
             }
